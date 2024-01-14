@@ -2,7 +2,7 @@
     <label><a style="font-size:150%; text-decoration:none; color:#666" href="{% url 'mailing:index' %}" class="logo">MS</a></label>
     <nav class="ms-5">
         <a class="p-2 btn btn-outline-dark" href="{% url 'mailing:users' %}">Пользователи</a>
-        <a class="p-2 btn btn-outline-dark" href="#">Рассылки</a>
-        <a class="p-2 btn btn-outline-dark" href="#">Расписание</a>
+        <a class="p-2 btn btn-outline-dark" href="{% url 'mailing:messages' %}">Сообщения</a>
+        <a class="p-2 btn btn-outline-dark" href="{% url 'mailing:schedules' %}">Расписание</a>
     </nav>
 </div>

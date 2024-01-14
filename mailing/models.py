@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db import models
 
 NULLABLE = {'blank': True, 'null': True}
@@ -22,8 +24,9 @@ class User(models.Model):
 
 
 class Message(models.Model):
-    title = models.CharField(max_length=150, verbose_name='тема', **NULLABLE)
+    title = models.CharField(max_length=150, verbose_name='Название', **NULLABLE)
     text = models.TextField(verbose_name='текст', **NULLABLE)
+    subject = models.CharField(max_length=150, **NULLABLE, verbose_name='тема')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     modified_date = models.DateTimeField(auto_now=True, verbose_name='дата изменения')
 
@@ -65,11 +68,12 @@ class Schedule(models.Model):
     status = models.CharField(default='c', choices=STATUS_CHOICES, verbose_name='статус')
     day_of_week = models.IntegerField(choices=DAY_OF_WEEK_CHOICES, verbose_name='день недели', **NULLABLE)
     day_of_month = models.IntegerField(verbose_name='день месяца', **NULLABLE)
+    users = models.ManyToManyField(to=User, blank=True, verbose_name='Пользователи')
     periodic = models.CharField(max_length=1, choices=PERIODIC_CHOICES, verbose_name='периодичность')
     start_date = models.DateField(verbose_name='дата начала')
     end_date = models.DateField(verbose_name='дата окончания')
-    time = models.TimeField(verbose_name='время начала')
-    is_active = models.BooleanField(default=True, verbose_name='активация')
+    time = models.TimeField(default=datetime.now(), verbose_name='время начала')
+    is_active = models.BooleanField(default=True, verbose_name='активна')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     modified_date = models.DateTimeField(auto_now=True, verbose_name='дата изменения')
 
