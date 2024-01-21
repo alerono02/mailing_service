@@ -1,9 +1,9 @@
-from django.contrib.auth.decorators import permission_required, login_required
 from django.shortcuts import redirect
 from django.views.generic import TemplateView, ListView, CreateView, UpdateView, DetailView, DeleteView
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 
+from mailing.forms import ScheduleForm
 from mailing.models import User, Schedule, Message, MailingLog
 
 
@@ -143,8 +143,7 @@ class ScheduleListView(ListView):
 
 class ScheduleCreateView(CreateView):
     model = Schedule
-    fields = ('description', 'message', 'status', 'day_of_week',
-              'day_of_month', 'periodic', 'start_date', 'end_date', 'time')
+    form_class = ScheduleForm
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -157,8 +156,7 @@ class ScheduleCreateView(CreateView):
 
 class ScheduleUpdateView(UpdateView):
     model = Schedule
-    fields = ('description', 'message', 'status', 'day_of_week',
-              'day_of_month', 'periodic', 'start_date', 'end_date', 'time')
+    form_class = ScheduleForm
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -167,6 +165,7 @@ class ScheduleUpdateView(UpdateView):
 
     def get_success_url(self):
         return reverse('mailing:schedules')
+
 
 
 class ScheduleDeleteView(DeleteView):

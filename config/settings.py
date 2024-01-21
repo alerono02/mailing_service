@@ -127,11 +127,12 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-EMAIL_HOST = 'smtp.yandex.com'
+EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'noreply@oscarbot.ru'
-EMAIL_HOST_PASSWORD = 'AsTSNVv7pun9'
-EMAIL_USE_TLS = True
+EMAIL_HOST_USER = "alexandr.ribakov2002@yandex.ru"
+EMAIL_HOST_PASSWORD = "emhiqnoeupmbaowm"
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True
 
 # Format string for displaying run time timestamps in the Django admin site. The default
 # just adds seconds to the standard Django format, which is useful for displaying the timestamps

@@ -50,6 +50,7 @@ class Schedule(models.Model):
         ('c', 'Created'),
         ('r', 'Running'),
         ('p', 'Paused'),
+        ('e', 'Failed'),
         ('f', 'Completed'),
     )
 
@@ -68,11 +69,11 @@ class Schedule(models.Model):
     status = models.CharField(default='c', choices=STATUS_CHOICES, verbose_name='статус')
     day_of_week = models.IntegerField(choices=DAY_OF_WEEK_CHOICES, verbose_name='день недели', **NULLABLE)
     day_of_month = models.IntegerField(verbose_name='день месяца', **NULLABLE)
-    users = models.ManyToManyField(to=User, blank=True, verbose_name='Пользователи')
+    users = models.ManyToManyField(User, verbose_name='Пользователи')
     periodic = models.CharField(max_length=1, choices=PERIODIC_CHOICES, verbose_name='периодичность')
     start_date = models.DateField(verbose_name='дата начала')
     end_date = models.DateField(verbose_name='дата окончания')
-    time = models.TimeField(default=datetime.now(), verbose_name='время начала')
+    time = models.TimeField(verbose_name='время начала')
     is_active = models.BooleanField(default=True, verbose_name='активна')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     modified_date = models.DateTimeField(auto_now=True, verbose_name='дата изменения')

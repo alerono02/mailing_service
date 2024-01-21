@@ -2,7 +2,7 @@
 {% block content %}
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h3>Рассылка</h3>
+    <h3>Рассылки</h3>
     <div class="btn-toolbar mb-2 mb-md-0">
         <a type="button" class="btn btn-sm btn-secondary mx-1" href="{% url 'mailing:mailing_logs' %}">Logs</a>
         <a type="button" class="btn btn-sm btn-secondary" href="{% url 'mailing:schedule_create' %}">Add
@@ -31,30 +31,32 @@
             <td>{{ object.end_date|date:"d M Y" }}</td>
 
             {% if object.periodic == "s" %}
-                <td>Once on {{ object.start_date|date:"d M Y" }} at {{ object.time|time:"H:i" }}</td>
+                <td>Единоразово в {{ object.start_date|date:"d M Y" }} at {{ object.time|time:"H:i" }}</td>
             {% elif object.periodic == "d" %}
-                <td>Daily at {{ object.time|time:"H:i" }}</td>
+                <td>Ежедневно в {{ object.time|time:"H:i" }}</td>
             {% elif object.periodic == "w" %}
-                <td>Weekly every {{ object.get_day_of_week_display }} at {{ object.time|time:"H:i" }}</td>
+                <td>Еженедельно {{ object.get_day_of_week_display }} at {{ object.time|time:"H:i" }}</td>
             {% elif object.periodic == "m" %}
-                <td>Monthly every {{ object.day_of_month }} day at {{ object.time|time:"H:i" }}</td>
+                <td>Ежемесячно {{ object.day_of_month }} day at {{ object.time|time:"H:i" }}</td>
             {% endif %}
 
             <td>{{ object.message.subject|truncatechars:30 }}</td>
             <td>
                 {% if object.is_active %}
                     {% if object.status == "c" %}
-                        <span class="badge rounded-pill text-bg-primary opacity-75">
+                        <span class="badge rounded-pill text-primary opacity-75">
                     {% elif object.status == "r" %}
-                        <span class="badge rounded-pill text-bg-success opacity-75">
+                        <span class="badge rounded-pill text-success opacity-75">
                     {% elif object.status == "p" %}
-                        <span class="badge rounded-pill text-bg-warning opacity-75">
+                        <span class="badge rounded-pill text-warning opacity-75">
+                    {% elif object.status == "e" %}
+                        <span class="badge rounded-pill text-danger opacity-75">
                     {% elif object.status == "f" %}
-                        <span class="badge rounded-pill text-bg-secondary opacity-75">
+                        <span class="badge rounded-pill text-secondary opacity-75">
                     {% endif %}
                     {{ object.get_status_display }}</span>
                 {% else %}
-                    <span class="badge rounded-pill text-bg-primary opacity-75">Not active</span>
+                    <span class="badge rounded-pill text-muted opacity-25">Not active</span>
                 {% endif %}
             </td>
 
@@ -62,7 +64,7 @@
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                         <a type="button" class="btn" href="{% url 'mailing:toggle_active' object.pk %}"
                            style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .25rem; --bs-btn-font-size: .75rem;">
-                            {% if object.status != "f" %}
+                            {% if object.status != "f" and "e" %}
                                 {% if object.is_active %}
                                     Отключить
                                 {% else %}
@@ -72,7 +74,7 @@
                         </a>
                         <a type="button" class="btn" href="{% url 'mailing:toggle_run_pause' object.pk %}"
                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .25rem; --bs-btn-font-size: .75rem;">
-                                {% if object.is_active and object.status != "f" %}
+                                {% if object.is_active and object.status != "f"  and "e"%}
                                     {% if object.status == "p" %}
                                         Начать
                                     {% else %}
