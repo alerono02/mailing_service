@@ -4,7 +4,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 
 from mailing.forms import ScheduleForm
-from mailing.models import User, Schedule, Message, MailingLog
+from mailing.models import Client, Schedule, Message, MailingLog
 
 
 class IndexView(TemplateView):
@@ -16,8 +16,8 @@ class IndexView(TemplateView):
         return context_data
 
 
-class UserListView(ListView):
-    model = User
+class ClientListView(ListView):
+    model = Client
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -29,8 +29,8 @@ class UserListView(ListView):
         return queryset
 
 
-class UserCreateView(CreateView):
-    model = User
+class ClientCreateView(CreateView):
+    model = Client
     fields = ('name', 'surname', 'patronymic', 'email')
 
     def get_context_data(self, **kwargs):
@@ -42,8 +42,8 @@ class UserCreateView(CreateView):
         return reverse('mailing:users')
 
 
-class UserUpdateView(UpdateView):
-    model = User
+class ClientUpdateView(UpdateView):
+    model = Client
     fields = ('name', 'surname', 'patronymic', 'email')
 
     def get_context_data(self, **kwargs):
@@ -55,8 +55,8 @@ class UserUpdateView(UpdateView):
         return reverse('mailing:users')
 
 
-class UserDeleteView(DeleteView):
-    model = User
+class ClientDeleteView(DeleteView):
+    model = Client
     success_url = reverse_lazy('mailing:users')
 
     def get_context_data(self, **kwargs):
@@ -65,8 +65,8 @@ class UserDeleteView(DeleteView):
         return context_data
 
 
-class UserDetailView(DetailView):
-    model = User
+class ClientDetailView(DetailView):
+    model = Client
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
@@ -188,7 +188,7 @@ class ScheduleDetailView(DetailView):
         context_data['title'] = self.object.description
 
         schedule_item = Schedule.objects.get(pk=self.kwargs.get('pk'))
-        user_item = User.objects.filter(is_active=True)
+        user_item = Client.objects.filter(is_active=True)
         context_data['schedule_pk'] = schedule_item.pk
         context_data['user_item'] = user_item
 

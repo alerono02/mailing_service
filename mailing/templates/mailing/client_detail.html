@@ -26,9 +26,9 @@
                 <small>Created at: <strong>{{ object.created_at|date:"d.m.Y H:i:s" }}</strong>, Modified at:
                     <strong>{{ object.modified_date|date:"d.m.Y H:i:s" }}</strong></small>
                 <div class="btn-group">
-                    <a href="{% url 'mailing:user_update' object.pk %}"
+                    <a href="{% url 'mailing:client_update' object.pk %}"
                        class="btn btn-sm btn-outline-primary">Edit</a>
-                    <a href="{% url 'mailing:user_delete' object.pk %}"
+                    <a href="{% url 'mailing:client_delete' object.pk %}"
                        class="btn btn-sm btn-outline-danger">Delete</a>
                 </div>
             </div>

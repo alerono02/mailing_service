@@ -3,7 +3,7 @@ import datetime
 from django.conf import settings
 from django.core.mail import send_mail
 
-from mailing.models import MailingLog, User, Schedule
+from mailing.models import MailingLog, Client, Schedule
 
 
 def send_mail_now(schedule):
@@ -16,7 +16,7 @@ def send_mail_now(schedule):
     """
     # Получаем сообщение и пользователей для рассылки
     message = schedule.message
-    users = Schedule.objects.get(id=schedule.id).users.all()
+    users = Schedule.objects.get(id=schedule.id).clients.all()
     print(users)
     # Отправляем почту каждому пользователю
 

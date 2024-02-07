@@ -4,7 +4,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h3>Пользователи</h3>
     <div class="btn-toolbar mb-2 mb-md-0">
-        <a type="button" class="btn btn-sm btn-secondary" href="{% url 'mailing:user_create' %}">Add
+        <a type="button" class="btn btn-sm btn-secondary" href="{% url 'mailing:client_create' %}">Add
             new</a>
     </div>
 </div>
@@ -36,15 +36,15 @@
 
             <td>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <a type="button" class="btn" href="{% url 'mailing:user_detail' object.pk %}"
+                    <a type="button" class="btn" href="{% url 'mailing:client_detail' object.pk %}"
                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                         View
                     </a>
-                    <a type="button" class="btn" href="{% url 'mailing:user_update' object.pk %}"
+                    <a type="button" class="btn" href="{% url 'mailing:client_update' object.pk %}"
                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                         Edit
                     </a>
-                    <a type="button" class="btn" href="{% url 'mailing:user_delete' object.pk %}"
+                    <a type="button" class="btn" href="{% url 'mailing:client_delete' object.pk %}"
                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
                         Delete
                     </a>

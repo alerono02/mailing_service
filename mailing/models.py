@@ -5,7 +5,7 @@ from django.db import models
 NULLABLE = {'blank': True, 'null': True}
 
 
-class User(models.Model):
+class Client(models.Model):
     surname = models.CharField(max_length=100, verbose_name='фамилия')
     name = models.CharField(max_length=100, verbose_name='имя')
     patronymic = models.CharField(max_length=100, verbose_name='отчество')
@@ -66,10 +66,10 @@ class Schedule(models.Model):
 
     description = models.TextField(max_length=200, verbose_name='описание')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='сообщение')
-    status = models.CharField(default='c', choices=STATUS_CHOICES, verbose_name='статус')
+    status = models.CharField(max_length=1, default='c', choices=STATUS_CHOICES, verbose_name='статус')
     day_of_week = models.IntegerField(choices=DAY_OF_WEEK_CHOICES, verbose_name='день недели', **NULLABLE)
     day_of_month = models.IntegerField(verbose_name='день месяца', **NULLABLE)
-    users = models.ManyToManyField(User, verbose_name='Пользователи')
+    clients = models.ManyToManyField(Client, verbose_name='Пользователи')
     periodic = models.CharField(max_length=1, choices=PERIODIC_CHOICES, verbose_name='периодичность')
     start_date = models.DateField(verbose_name='дата начала')
     end_date = models.DateField(verbose_name='дата окончания')

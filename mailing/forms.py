@@ -1,12 +1,12 @@
 from django import forms
 
-from mailing.models import Schedule, User
+from mailing.models import Schedule, Client
 
 
 class ScheduleForm(forms.ModelForm):
     users = forms.ModelMultipleChoiceField(
         label='Choice users',
-        queryset=User.objects.filter(is_active=True),
+        queryset=Client.objects.filter(is_active=True),
         widget=forms.CheckboxSelectMultiple
     )
 

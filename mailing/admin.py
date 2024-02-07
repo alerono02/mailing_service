@@ -1,9 +1,9 @@
 from django.contrib import admin
 
-from mailing.models import User, Message, MailingLog, Schedule
+from mailing.models import Client, Message, MailingLog, Schedule
 
 
-@admin.register(User)
+@admin.register(Client)
 class UserAdmin(admin.ModelAdmin):
     list_display = ('surname', 'name','patronymic' , 'email', 'is_active',
                     'created_at', 'modified_date')
