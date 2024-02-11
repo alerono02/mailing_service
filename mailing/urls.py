@@ -33,4 +33,5 @@ urlpatterns = [
 
     path('mailing_logs/', MailingLogListView.as_view(), name='mailing_logs'),
     path('mailing_logs/view/<int:pk>', MailingLogDetailView.as_view(), name='mailing_log_view'),
+
 ]

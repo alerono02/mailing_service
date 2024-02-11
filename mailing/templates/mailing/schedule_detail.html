@@ -1,64 +1,65 @@
 {% extends 'mailing/base.html' %}
 {% block content %}
-<div class="card">
-    <div class="card-header">
-        <div class="card-title"><strong><p><h4>Schedule - {{ object.description }}</p></h4></strong></div>
-    </div>
 
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Статус</dt>
-            <dd class="col-sm-9">{{ object.get_status_display }}</dd>
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title"><strong><h4>Schedule - {{ object.description }}</h4></strong></div>
+        </div>
 
-            <dt class="col-sm-3">Начало - окончание</dt>
-            <dd class="col-sm-9">{{ object.start_date }} - {{ object.end_date }}</dd>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Статус</dt>
+                <dd class="col-sm-9">{{ object.get_status_display }}</dd>
 
-            <dt class="col-sm-3">Переодичность</dt>
-            <dd class="col-sm-9">
-                {% if object.periodic == "s" %}
-                Once on {{ object.start_date|date:"d M Y" }} at {{ object.time|time:"H:i" }}
-                {% elif object.periodic == "d" %}
-                Каждый день {{ object.time|time:"H:i" }}
-                {% elif object.periodic == "w" %}
-                Каждую неделю в {{ object.get_day_of_week_display }}
-                {% elif object.periodic == "m" %}
-                Каждый месяц {{ object.day_of_month }} числа
-                {% endif %}
-            </dd>
+                <dt class="col-sm-3">Начало - окончание</dt>
+                <dd class="col-sm-9">{{ object.start_date }} - {{ object.end_date }}</dd>
 
-            <dt class="col-sm-3">Тип</dt>
-            <dd class="col-sm-9">{{ object.message.subject }}</dd>
-
-            <dt class="col-sm-3">Текст сообщения</dt>
-            <dd class="col-sm-9">{{ object.message.text|linebreaksbr }}</dd>
-        </dl>
-    </div>
-
-    <div class="card-footer">
-        <div class="d-flex justify-content-between align-items-center">
-            <div class="btn-group">
-                <a class="btn btn-outline-secondary btn-sm"
-                   href="{% url 'mailing:toggle_run_pause' object.pk %}">
-                    {% if object.is_active and object.status != "f" %}
-                    {% if object.status == "p" %}
-                    Run
-                    {% else %}
-                    Pause
+                <dt class="col-sm-3">Переодичность</dt>
+                <dd class="col-sm-9">
+                    {% if object.periodic == "s" %}
+                        Once on {{ object.start_date|date:"d M Y" }} at {{ object.time|time:"H:i" }}
+                    {% elif object.periodic == "d" %}
+                        Каждый день {{ object.time|time:"H:i" }}
+                    {% elif object.periodic == "w" %}
+                        Каждую неделю в {{ object.get_day_of_week_display }}
+                    {% elif object.periodic == "m" %}
+                        Каждый месяц {{ object.day_of_month }} числа
                     {% endif %}
-                    {% endif %}
-                </a>
-                <a class="btn btn-outline-primary btn-sm"
-                   href="{% url 'mailing:schedule_update' object.pk %}">Edit</a>
-                <a class="btn btn-outline-danger btn-sm"
-                   href="{% url 'mailing:schedule_delete' object.pk %}">Delete</a>
+                </dd>
+
+                <dt class="col-sm-3">Тип</dt>
+                <dd class="col-sm-9">{{ object.message.subject }}</dd>
+
+                <dt class="col-sm-3">Текст сообщения</dt>
+                <dd class="col-sm-9">{{ object.message.text|linebreaksbr }}</dd>
+            </dl>
+        </div>
+
+        <div class="card-footer">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group">
+                    <a class="btn btn-outline-secondary btn-sm"
+                       href="{% url 'mailing:toggle_run_pause' object.pk %}">
+                        {% if object.is_active and object.status != "f" %}
+                            {% if object.status == "p" %}
+                                Run
+                            {% else %}
+                                Pause
+                            {% endif %}
+                        {% endif %}
+                    </a>
+                    <a class="btn btn-outline-primary btn-sm"
+                       href="{% url 'mailing:schedule_update' object.pk %}">Edit</a>
+                    <a class="btn btn-outline-danger btn-sm"
+                       href="{% url 'mailing:schedule_delete' object.pk %}">Delete</a>
+                </div>
+                <small>Created at: <strong>{{ object.created_at|date:"d M Y H:i" }}</strong>, Modified at:
+                    <strong>{{ object.modified_date|date:"d M Y H:i" }}</strong></small>
             </div>
-            <small>Created at: <strong>{{ object.created_at|date:"d M Y H:i" }}</strong>, Modified at:
-                <strong>{{ object.modified_date|date:"d M Y H:i" }}</strong></small>
         </div>
     </div>
-</div>
 
-<br>
+    <br>
 
 
 {% endblock %}

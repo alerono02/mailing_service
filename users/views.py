@@ -1,18 +1,20 @@
 from django.contrib.auth import login
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.views import LoginView as BaseLoginView
+from django.contrib.auth.views import LoginView as BaseLoginView, PasswordResetConfirmView, PasswordResetView
 from django.contrib.auth.views import LogoutView as BaseLogoutView
+from django.contrib.messages.views import SuccessMessageMixin
 
 from django.contrib.sites.models import Site
 from django.core.mail import send_mail
 from django.shortcuts import redirect
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.crypto import get_random_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.views import View
-from django.views.generic import CreateView, DetailView, UpdateView, TemplateView, FormView
+from django.views.generic import CreateView, DetailView, UpdateView, TemplateView, FormView, ListView
 
 from config import settings
 from users.forms import UserRegisterForm, UserForm, PasswordRecoveryForm
@@ -131,7 +133,7 @@ class EmailConfirmationFailedView(TemplateView):
 class PasswordRecoveryView(FormView):
     template_name = 'users/password_recovery.html'
     form_class = PasswordRecoveryForm
-    success_url = reverse_lazy('user:login')
+    success_url = reverse_lazy('users:login')
 
     def form_valid(self, form):
         email = form.cleaned_data['email']
@@ -151,3 +153,24 @@ class PasswordRecoveryView(FormView):
             fail_silently=False,
         )
         return super().form_valid(form)
+
+
+class UserListView(PermissionRequiredMixin, ListView):
+    model = User
+    permission_required = 'users.view_user'
+
+    def get_queryset(self, *args, **kwargs):
+        if self.request.user.is_superuser:
+            queryset = super().get_queryset()
+        else:
+            queryset = super().get_queryset().filter(is_superuser=False, is_staff=False)
+        return queryset
+
+
+@permission_required('users.view_user')
+def block_user(self, pk):
+    user = User.objects.get(pk=pk)
+    user.is_active = {user.is_active: False,
+                          not user.is_active: True}[True]
+    user.save()
+    return redirect(reverse('users:users_list'))
