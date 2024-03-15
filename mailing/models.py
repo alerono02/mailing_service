@@ -1,9 +1,13 @@
+from datetime import datetime
+
 from django.db import models
+
+from users.models import User
 
 NULLABLE = {'blank': True, 'null': True}
 
 
-class User(models.Model):
+class Client(models.Model):
     surname = models.CharField(max_length=100, verbose_name='фамилия')
     name = models.CharField(max_length=100, verbose_name='имя')
     patronymic = models.CharField(max_length=100, verbose_name='отчество')
@@ -12,20 +16,23 @@ class User(models.Model):
     modified_date = models.DateTimeField(auto_now=True, verbose_name='дата изменения')
     comment = models.TextField(verbose_name='комментарий', **NULLABLE)
     is_active = models.BooleanField(default=True, verbose_name='активность')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, **NULLABLE, verbose_name='Владелец')
 
     def __str__(self):
         return f'{self.surname} {self.name[0]}. {self.patronymic[0]}.({self.email})'
 
     class Meta:
-        verbose_name = 'пользователь'
-        verbose_name_plural = 'пользователи'
+        verbose_name = 'клиент'
+        verbose_name_plural = 'клиенты'
 
 
 class Message(models.Model):
-    title = models.CharField(max_length=150, verbose_name='тема', **NULLABLE)
+    title = models.CharField(max_length=150, verbose_name='Название', **NULLABLE)
     text = models.TextField(verbose_name='текст', **NULLABLE)
+    subject = models.CharField(max_length=150, **NULLABLE, verbose_name='тема')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     modified_date = models.DateTimeField(auto_now=True, verbose_name='дата изменения')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, **NULLABLE, verbose_name='Владелец')
 
     def __str__(self):
         return f'{self.title} {self.text}'
@@ -47,6 +54,7 @@ class Schedule(models.Model):
         ('c', 'Created'),
         ('r', 'Running'),
         ('p', 'Paused'),
+        ('e', 'Failed'),
         ('f', 'Completed'),
     )
 
@@ -62,16 +70,18 @@ class Schedule(models.Model):
 
     description = models.TextField(max_length=200, verbose_name='описание')
     message = models.ForeignKey(Message, on_delete=models.CASCADE, verbose_name='сообщение')
-    status = models.CharField(default='c', choices=STATUS_CHOICES, verbose_name='статус')
+    status = models.CharField(max_length=1, default='c', choices=STATUS_CHOICES, verbose_name='статус')
     day_of_week = models.IntegerField(choices=DAY_OF_WEEK_CHOICES, verbose_name='день недели', **NULLABLE)
     day_of_month = models.IntegerField(verbose_name='день месяца', **NULLABLE)
+    clients = models.ManyToManyField(Client, verbose_name='Пользователи')
     periodic = models.CharField(max_length=1, choices=PERIODIC_CHOICES, verbose_name='периодичность')
     start_date = models.DateField(verbose_name='дата начала')
     end_date = models.DateField(verbose_name='дата окончания')
     time = models.TimeField(verbose_name='время начала')
-    is_active = models.BooleanField(default=True, verbose_name='активация')
+    is_active = models.BooleanField(default=True, verbose_name='активна')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     modified_date = models.DateTimeField(auto_now=True, verbose_name='дата изменения')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, **NULLABLE, verbose_name='Владелец')
 
     def __str__(self):
         return f'{self.message.title} - {self.start_date} - {self.end_date}'
